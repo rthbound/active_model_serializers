@@ -10,7 +10,7 @@ module ActionController
             type 'posts'
             attributes :title, :body, :publish_at
             belongs_to :author
-            has_many :comments
+            has_many :bad_comments
 
             link(:post_authors) { 'https://example.com/post_authors' }
 
@@ -28,9 +28,9 @@ module ActionController
             attributes :first_name, :last_name
           end
 
-          Comment = Class.new(::Model)
-          class CommentSerializer < ActiveModel::Serializer
-            type 'comments'
+          BadComment = Class.new(::Model)
+          class BadCommentSerializer < ActiveModel::Serializer
+            type 'bad_comments'
             attributes :body
             belongs_to :author
           end
@@ -38,10 +38,10 @@ module ActionController
           def setup_post
             ActionController::Base.cache_store.clear
             @author = Author.new(id: 1, first_name: 'Bob', last_name: 'Jones')
-            @comment1 = Comment.new(id: 7, body: 'cool', author: @author)
-            @comment2 = Comment.new(id: 12, body: 'awesome', author: @author)
+            @comment1 = BadComment.new(id: 7, body: 'cool', author: @author)
+            @comment2 = BadComment.new(id: 12, body: 'awesome', author: @author)
             @post = Post.new(id: 1337, title: 'Title 1', body: 'Body 1',
-                             author: @author, comments: [@comment1, @comment2],
+                             author: @author, bad_comments: [@comment1, @comment2],
                              publish_at: '2020-03-16T03:55:25.291Z')
             @comment1.post = @post
             @comment2.post = @post
@@ -89,10 +89,10 @@ module ActionController
                     'Type' => 'authors'
                   }
                 },
-                'Comments' => {
+                'BadComments' => {
                   'Data' => [
-                    { 'Id' => '7', 'Type' => 'comments' },
-                    { 'Id' => '12', 'Type' => 'comments' }
+                    { 'Id' => '7', 'Type' => 'BadComments' },
+                    { 'Id' => '12', 'Type' => 'BadComments' }
                   ]
                 }
               },
@@ -124,10 +124,10 @@ module ActionController
                     'type' => 'authors'
                   }
                 },
-                'comments' => {
+                'bad-comments' => {
                   'data' => [
-                    { 'id' => '7', 'type' => 'comments' },
-                    { 'id' => '12', 'type' => 'comments' }
+                    { 'id' => '7', 'type' => 'bad-comments' },
+                    { 'id' => '12', 'type' => 'bad-comments' }
                   ]
                 }
               },
@@ -159,10 +159,10 @@ module ActionController
                     'type' => 'authors'
                   }
                 },
-                'comments' => {
+                'badComments' => {
                   'data' => [
-                    { 'id' => '7', 'type' => 'comments' },
-                    { 'id' => '12', 'type' => 'comments' }
+                    { 'id' => '7', 'type' => 'badComments' },
+                    { 'id' => '12', 'type' => 'badComments' }
                   ]
                 }
               },
